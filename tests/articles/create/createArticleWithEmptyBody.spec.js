@@ -18,7 +18,5 @@ test('Create article with empty body', async ({
     `Token ${registeredUser.token}`,
   );
 
-  await articlesApi.assertSuccessResponseCode(response);
-  await articlesApi.assertArticleHasCorrectValues(response, articleData);
-  await articlesApi.assertArticleAuthor(response, registeredUser.username);
+  await articlesApi.assertUnprocessableEntityResponseCode(response);
 });
