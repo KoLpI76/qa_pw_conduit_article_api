@@ -2,18 +2,22 @@ import { test as base } from '@playwright/test';
 import { ArticlesApi } from '../../src/api/endpoints/ArticlesApi';
 import { generateNewArticleData } from '../../src/common/testData/generateNewArticleData';
 
-export const test = base.extend<{
-  articlesApi;
-  newArticleData;
-}>({
-  articlesApi: async ({ request }, use) => {
-    const client = new ArticlesApi(request);
+type ArticleData = ReturnType<typeof generateNewArticleData>;
 
-    await use(client);
+type ArticlesApiFixtures = {
+  articlesApi: ArticlesApi;
+  newArticleData: ArticleData;
+};
+
+export const test = base.extend<ArticlesApiFixtures>({
+  articlesApi: async ({ request }, use) => {
+    const articlesApi = new ArticlesApi(request);
+
+    await use(articlesApi);
   },
 
-  newArticleData: async ({ logger }, use) => {
-    const articleData = generateNewArticleData(logger, 3);
+  newArticleData: async ({}, use) => {
+    const articleData = generateNewArticleData(null, 3);
 
     await use(articleData);
   },
